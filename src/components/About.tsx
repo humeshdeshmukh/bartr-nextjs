@@ -4,7 +4,12 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FaUsers, FaRocket, FaChartLine, FaGlobe } from 'react-icons/fa';
 
-const StatCard = ({ number, label }) => (
+interface StatCardProps {
+  number: string;
+  label: string;
+}
+
+const StatCard = ({ number, label }: StatCardProps) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
     className="bg-black/40 p-6 rounded-lg backdrop-blur-sm border border-gray-800"

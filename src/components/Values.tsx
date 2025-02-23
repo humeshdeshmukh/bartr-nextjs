@@ -11,8 +11,20 @@ import {
   FaLeaf,
   FaChevronRight
 } from 'react-icons/fa';
+import { ReactNode } from 'react';
 
-const ValueCard = ({ value, index }) => {
+interface ValueItem {
+  title: string;
+  description: string;
+  icon: ReactNode;
+}
+
+interface ValueCardProps {
+  value: ValueItem;
+  index: number;
+}
+
+const ValueCard = ({ value, index }: ValueCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -68,8 +80,8 @@ const ValueCard = ({ value, index }) => {
   );
 };
 
-const getValueDetail = (title) => {
-  const details = {
+const getValueDetail = (title: string): string => {
+  const details: Record<string, string> = {
     "Integrity": "We maintain the highest ethical standards in all our business practices, ensuring trust and reliability.",
     "Excellence": "Our commitment to quality drives us to continuously improve and deliver outstanding results.",
     "Innovation": "We embrace cutting-edge solutions and creative thinking to stay ahead of industry trends.",
@@ -84,7 +96,7 @@ const Values = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const values = [
+  const values: ValueItem[] = [
     {
       title: "Integrity",
       description: "Upholding honesty and transparency in all our dealings.",

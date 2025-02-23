@@ -3,8 +3,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FaUserTie, FaLightbulb, FaNewspaper, FaChartLine, FaComments, FaArrowRight } from 'react-icons/fa';
+import { ReactNode } from 'react';
 
-const ServiceCard = ({ service, index }) => {
+interface ServiceItem {
+  title: string;
+  icon: ReactNode;
+  description?: string;
+  items?: string[];
+}
+
+interface ServiceCardProps {
+  service: ServiceItem;
+  index: number;
+}
+
+const ServiceCard = ({ service, index }: ServiceCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -84,7 +97,7 @@ const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const services = [
+  const services: ServiceItem[] = [
     {
       title: "Management Consulting Services",
       icon: <FaUserTie className="w-8 h-8 text-primary-yellow" />,
