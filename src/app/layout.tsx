@@ -7,15 +7,23 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BCG - Business Consulting Group",
-  description: "Empowering businesses and entrepreneurs across India and the world",
+  title: "BCG - Bartr Catalyst Group",
+  description: "Empowering businesses and entrepreneurs across India and the world. BCG (Bartr Catalyst Group) is your trusted partner in business growth and innovation.",
+  keywords: "BCG, Bartr Catalyst Group, Business Consulting, Strategic Solutions, Innovation",
+  authors: [{ name: "Bartr Catalyst Group" }],
+  openGraph: {
+    title: "BCG - Bartr Catalyst Group",
+    description: "Empowering businesses and entrepreneurs across India and the world",
+    siteName: "Bartr Catalyst Group (BCG)",
+    type: "website"
+  }
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
