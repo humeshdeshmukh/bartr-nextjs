@@ -1,95 +1,113 @@
 'use client';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
 
 const Footer = () => {
-  const footerRef = useRef(null);
-  const isInView = useInView(footerRef, { once: true, margin: "-100px" });
+  const router = useRouter();
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        staggerChildren: 0.2
-      }
+  const handleNavigation = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      router.push(`/#${sectionId}`);
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
+  const socialLinks = [
+    { icon: <FaFacebook />, url: 'https://facebook.com' },
+    { icon: <FaTwitter />, url: 'https://twitter.com' },
+    { icon: <FaInstagram />, url: 'https://instagram.com' },
+    { icon: <FaLinkedin />, url: 'https://linkedin.com' }
+  ];
+
+  const footerLinks = [
+    { label: 'About Us', id: 'about' },
+    { label: 'Services', id: 'services' },
+    { label: 'Values', id: 'values' },
+    // { label: 'Contact', id: 'contact' }
+  ];
 
   return (
-    <footer ref={footerRef} className="bg-black/90 backdrop-blur-sm py-16 mt-16">
+    <footer className="bg-black/30 backdrop-blur-lg py-12">
       <div className="container mx-auto px-4">
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-2xl font-bold gradient-text mb-4">BCG</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Empowering businesses and entrepreneurs across India and the world.
+          <div className="space-y-4">
+            <Link 
+              href="/"
+              className="text-2xl font-bold gradient-text"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigation('home');
+              }}
+            >
+              BCG
+            </Link>
+            <p className="text-gray-400">
+              Empowering businesses through innovative solutions and strategic guidance.
             </p>
-          </motion.div>
+          </div>
 
           {/* Quick Links */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
-            <ul className="space-y-3">
-              {['Home', 'Services', 'About', 'Values'].map((item, index) => (
-                <motion.li
-                  key={item}
-                  variants={itemVariants}
-                  custom={index}
-                >
-                  <Link
-                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+          <div>
+            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              {footerLinks.map((link) => (
+                <li key={link.id}>
+                  <button
+                    onClick={() => handleNavigation(link.id)}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {item}
-                  </Link>
-                </motion.li>
+                    {link.label}
+                  </button>
+                </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Contact */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
-            <p className="text-gray-400">
-              <a 
-                href="mailto:inrcommunication@gmail.com" 
-                className="hover:text-white transition-colors"
-              >
-                inrcommunication@gmail.com
-              </a>
-            </p>
-          </motion.div>
-        </motion.div>
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-white font-semibold mb-4">Contact Us</h3>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <a 
+                  href="mailto:inrcommunication@gmail.com"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  inrcommunication@gmail.com
+                </a>
+              </li>
+              <li>Bartr Catalyst Group (BCG)</li>
+              <li>Your Trusted Partner in Business Growth</li>
+            </ul>
+          </div>
 
-        {/* Copyright */}
-        <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
-        >
-          <p> {new Date().getFullYear()} BCG. All rights reserved.</p>
-        </motion.div>
+          {/* Social Links */}
+          <div>
+            <h3 className="text-white font-semibold mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-primary-yellow transition-colors text-xl"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <p className="text-center text-gray-400">
+            {new Date().getFullYear()} Bartr Catalyst Group. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

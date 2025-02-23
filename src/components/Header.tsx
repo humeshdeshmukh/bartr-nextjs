@@ -1,107 +1,103 @@
 'use client';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FaBars, FaTimes } from 'react-icons/fa';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavigation = (sectionId: string) => {
+    setIsOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      router.push(`/#${sectionId}`);
+    }
+  };
+
+  const navItems = [
+    { label: 'Home', id: 'home' },
+    { label: 'About', id: 'about' },
+    { label: 'Services', id: 'services' },
+    { label: 'Values', id: 'values' },
+    // { label: 'Contact', id: 'contact' }
+  ];
+
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-sm py-4' : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'py-4 bg-black/80 backdrop-blur-lg' : 'py-6'}`}>
+      <nav className="container mx-auto px-4">
+        <div className="flex items-center justify-between">
+          <Link 
+            href="/"
+            className="text-2xl font-bold gradient-text"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('home');
+            }}
           >
-            <Link href="/" className="text-2xl font-bold gradient-text">
-              BCG
-            </Link>
-          </motion.div>
+            BCG
+          </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {['Home', 'Services', 'About', 'Values'].map((item, index) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNavigation(item.id)}
+                className="text-gray-300 hover:text-white transition-colors"
               >
-                <Link 
-                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} 
-                  className="nav-link"
-                >
-                  {item}
-                </Link>
-              </motion.div>
+                {item.label}
+              </button>
             ))}
-          </nav>
+          </div>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="md:hidden z-50 relative p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+          <button
+            className="md:hidden text-white focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
           >
-            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </motion.button>
-
-          {/* Mobile Navigation */}
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'tween', duration: 0.3 }}
-                className="fixed inset-0 bg-black/95 backdrop-blur-lg md:hidden"
-              >
-                <nav className="flex flex-col items-center justify-center h-full space-y-8">
-                  {['Home', 'Services', 'About', 'Values'].map((item, index) => (
-                    <motion.div
-                      key={item}
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                    >
-                      <Link
-                        href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                        className="nav-link text-xl"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </nav>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
         </div>
-      </div>
-    </motion.header>
+
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden mt-4"
+            >
+              <div className="flex flex-col space-y-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavigation(item.id)}
+                    className="text-gray-300 hover:text-white transition-colors py-2"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </header>
   );
 };
 
