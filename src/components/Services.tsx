@@ -150,7 +150,7 @@ const Services = () => {
       description: "Strategic investment solutions for promising startups and emerging businesses."
     },
     {
-      title: "Bartr OPINIONS",
+      title: "Bartr Opinions",
       icon: <FaComments className="w-8 h-8 text-primary-yellow" />,
       description: "Expert insights and analysis on industry trends and market dynamics."
     }
